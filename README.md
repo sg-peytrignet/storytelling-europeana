@@ -28,7 +28,7 @@ This project, "Storytelling Europeana", demonstrates how to use the Europeana AP
 1. Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/storytelling-europeana.git
+git clone https://github.com/sg-peytrignet/storytelling-europeana.git
 cd storytelling-europeana
 ```
 
