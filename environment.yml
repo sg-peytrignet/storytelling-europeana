@@ -1,0 +1,21 @@
+name: glamhack24
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - geopandas
+  - matplotlib
+  - numpy
+  - flake8
+  - ipykernel
+  - autopep8
+  - pandas<2.0
+  - scipy
+  - shapely
+  - nbstripout
+  - nbconvert
+  - python-dotenv
+  - pip
+  - pip:
+    - pyeuropeana
