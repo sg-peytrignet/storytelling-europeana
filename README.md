@@ -4,11 +4,13 @@ This project, "Storytelling Europeana", demonstrates how to use the Europeana AP
 
 ## Project Structure
 
+```bash
 .
 ├── LICENSE
 ├── README.md
 ├── environment.yml
 └── using_api.ipynb
+```
 
 - `LICENSE`: Contains the license information for this project.
 - `README.md`: This file, providing project information and setup instructions.
