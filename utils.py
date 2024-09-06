@@ -4,7 +4,7 @@ import geopandas as gpd
 
 def get_provider_data(provider_name, world_gdf, rows=1000):
     """
-    Query Europeana API for a specific data provider and return a processed DataFrame.
+    Query Europeana API for a specific data provider and return processed DataFrames.
     
     Args:
     provider_name (str): Name of the data provider to query
@@ -12,7 +12,9 @@ def get_provider_data(provider_name, world_gdf, rows=1000):
     rows (int): Number of rows to retrieve (default 1000)
     
     Returns:
-    pandas.DataFrame: Processed DataFrame with the queried data, including object location
+    tuple: (pandas.DataFrame, geopandas.GeoDataFrame)
+        - First DataFrame: Processed DataFrame with the queried data, including object location
+        - Second GeoDataFrame: Count of objects per country from the world dataset, including geometry
     """
     # Query the Europeana API
     myquery = apis.search(
@@ -52,7 +54,12 @@ def get_provider_data(provider_name, world_gdf, rows=1000):
     # Fill NaN values (points that don't fall within any country) with "Unknown"
     myquery_df['object_location'] = myquery_df['object_location'].fillna("Unknown")
     
-    return myquery_df
+    # Create world_counts directly from the spatial join result
+    world_counts = world_gdf.copy()
+    country_counts = gdf_with_country['name'].value_counts()
+    world_counts['object_count'] = world_counts['name'].map(country_counts).fillna(0).astype(int)
+    
+    return myquery_df, world_counts
 
 def aggregate_location_counts(df):
     """
