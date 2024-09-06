@@ -44,6 +44,8 @@ conda env create -f environment.yml
 conda activate glamhack24
 ```
 
+4. Input your API key in a .env file following the template
+
 ### Running the Notebook
 
 1. Start Jupyter Notebook:
