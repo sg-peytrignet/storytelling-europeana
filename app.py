@@ -14,25 +14,38 @@ if 'EUROPEANA_API_KEY' not in os.environ:
     st.error("EUROPEANA_API_KEY is not set in the environment variables. Please set it and restart the app.")
     st.stop()
 
+
 def get_provider_data(provider_name, rows=1000):
     myquery = apis.search(
         query='pl_wgs84_pos_lat:(*)',
         qf=f'DATA_PROVIDER:"{provider_name}"',
         rows=rows
     )
-    
-    myquery_df = pd.DataFrame(myquery["items"], columns=['edmPlaceLatitude', 'edmPlaceLongitude', 'id', 'country', 'dataProvider', 'dcCreator'])
-    
+
+    myquery_df = pd.DataFrame(
+        myquery["items"],
+        columns=[
+            'edmPlaceLatitude',
+            'edmPlaceLongitude',
+            'id',
+            'country',
+            'dataProvider',
+            'dcCreator'])
+
     def extract_single(x):
         return x[0] if isinstance(x, list) and len(x) > 0 else x
-    
-    for col in ['edmPlaceLatitude', 'edmPlaceLongitude', 'country', 'dataProvider', 'dcCreator']:
+
+    for col in ['edmPlaceLatitude', 'edmPlaceLongitude',
+                'country', 'dataProvider', 'dcCreator']:
         myquery_df[col] = myquery_df[col].apply(extract_single)
-    
-    myquery_df['edmPlaceLatitude'] = pd.to_numeric(myquery_df['edmPlaceLatitude'], errors='coerce')
-    myquery_df['edmPlaceLongitude'] = pd.to_numeric(myquery_df['edmPlaceLongitude'], errors='coerce')
-    
+
+    myquery_df['edmPlaceLatitude'] = pd.to_numeric(
+        myquery_df['edmPlaceLatitude'], errors='coerce')
+    myquery_df['edmPlaceLongitude'] = pd.to_numeric(
+        myquery_df['edmPlaceLongitude'], errors='coerce')
+
     return myquery_df
+
 
 # Set up the Streamlit app
 st.title('Europeana Data Explorer')
@@ -47,17 +60,20 @@ if st.button('Fetch Data'):
         with st.spinner('Fetching data...'):
             # Get the data
             df = get_provider_data(provider_name)
-        
+
         # Display the data
         st.subheader(f'Data from {provider_name}')
         st.write(f'Number of items retrieved: {len(df)}')
-        
+
         # Display the first few rows
         st.subheader('First few rows of data:')
         st.write(df.head())
-        
+
         # Create a map centered on the mean latitude and longitude
-        valid_coords = df.dropna(subset=['edmPlaceLatitude', 'edmPlaceLongitude'])
+        valid_coords = df.dropna(
+            subset=[
+                'edmPlaceLatitude',
+                'edmPlaceLongitude'])
         if not valid_coords.empty:
             center_lat = valid_coords['edmPlaceLatitude'].mean()
             center_lon = valid_coords['edmPlaceLongitude'].mean()
@@ -66,7 +82,9 @@ if st.button('Fetch Data'):
             # Add markers for each item
             for _, row in valid_coords.iterrows():
                 folium.Marker(
-                    location=[row['edmPlaceLatitude'], row['edmPlaceLongitude']],
+                    location=[
+                        row['edmPlaceLatitude'],
+                        row['edmPlaceLongitude']],
                     popup=f"ID: {row['id']}<br>Creator: {row['dcCreator']}<br>Country: {row['country']}",
                     tooltip=row['id']
                 ).add_to(m)
@@ -76,7 +94,7 @@ if st.button('Fetch Data'):
             folium_static(m)
         else:
             st.warning('No valid coordinates found in the data.')
-        
+
         # Option to download the full dataset
         csv = df.to_csv(index=False)
         st.download_button(
