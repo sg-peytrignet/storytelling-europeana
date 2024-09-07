@@ -2,6 +2,10 @@
 
 This project, "Storytelling Europeana", demonstrates how to use the Europeana API to access and tell stories with cultural heritage data from across Europe. It includes a Jupyter notebook that walks through the process of making API calls, working with the returned data, and crafting narratives around the cultural artifacts.
 
+**Web app is deployed on [Hugging Face](https://huggingface.co/spaces/sgpeytrignet/europeana-data-explorer)**
+
+![snapshot](data/euro-app-snapshot.png)
+
 ## Project Structure
 
 ```bash
