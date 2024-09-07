@@ -4,6 +4,8 @@ This project, "Storytelling Europeana", demonstrates how to use the Europeana AP
 
 **Web app is deployed on [Hugging Face](https://huggingface.co/spaces/sgpeytrignet/europeana-data-explorer)**
 
+![snapshot](data/euro-app-snapshot.png)
+
 ## Project Structure
 
 ```bash
